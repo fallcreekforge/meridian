@@ -1,0 +1,37 @@
+[workspace]
+members = ["crates/meridian"]
+resolver = "3"
+
+[workspace.package]
+edition = "2024"
+rust-version = "1.94"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/fallcreekforge/meridian"
+
+[workspace.lints.rust]
+warnings = "deny"
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+restriction = { level = "warn", priority = -1 }
+blanket_clippy_restriction_lints = "allow"
+allow_attributes_without_reason = "allow"
+arithmetic_side_effects = "allow"
+as_conversions = "allow"
+expect_used = "allow"
+indexing_slicing = "allow"
+implicit_return = "allow"
+missing_inline_in_public_items = "allow"
+missing_docs_in_private_items = "allow"
+missing_errors_doc = "allow"
+missing_panics_doc = "allow"
+panic = "allow"
+panic_in_result_fn = "allow"
+print_stderr = "allow"
+print_stdout = "allow"
+single_call_fn = "allow"
+todo = "allow"
+unimplemented = "allow"
+unwrap_in_result = "allow"
+unwrap_used = "allow"
