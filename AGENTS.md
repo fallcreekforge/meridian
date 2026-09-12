@@ -1,6 +1,7 @@
 # Repository instructions
 
 - Use Nushell; `nix develop` starts the pinned environment.
+- Meridian is the product; this repository implements Meridian Client.
 - Make the smallest coherent change and avoid speculative dependencies or abstractions.
 - Preserve the dependency graph in `ARCHITECTURE.md` and keep cloud implementation out of this
   repository.

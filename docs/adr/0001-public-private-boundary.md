@@ -10,7 +10,7 @@ may cross into Fall Creek Forge infrastructure.
 
 ## Decision
 
-This repository contains only Meridian's open-source customer-controlled software. Proprietary
+This repository contains only the open-source, customer-controlled Meridian Client. Proprietary
 Meridian Cloud implementation remains outside it. The public sync protocol defines the trust
 boundary.
 

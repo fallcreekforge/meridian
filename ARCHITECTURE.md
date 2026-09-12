@@ -1,12 +1,12 @@
 # Architecture
 
-This repository implements Meridian software that runs in a customer's environment. Proprietary
+This repository implements Meridian Client, which runs in a customer's environment. Proprietary
 Meridian Cloud code is outside this repository.
 
 ```text
 Platform credential
        ↓
-local Meridian client
+Meridian Client
        ↓
 platform API
        ↓
