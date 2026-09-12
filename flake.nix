@@ -9,13 +9,20 @@
     };
   };
 
-  outputs = { nixpkgs, fenix, ... }:
+  outputs =
+    { nixpkgs, fenix, ... }:
     let
-      systems = [ "aarch64-darwin" "aarch64-linux" "x86_64-darwin" "x86_64-linux" ];
+      systems = [
+        "aarch64-darwin"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "x86_64-linux"
+      ];
       forAllSystems = nixpkgs.lib.genAttrs systems;
     in
     {
-      devShells = forAllSystems (system:
+      devShells = forAllSystems (
+        system:
         let
           pkgs = import nixpkgs {
             inherit system;
@@ -27,15 +34,21 @@
             "rustc"
             "rustfmt"
           ];
+          clippyConfDir = pkgs.linkFarm "meridian-clippy-configuration" {
+            "clippy.toml" = ./clippy.toml;
+          };
         in
         {
           default = pkgs.mkShell {
             packages = [
               rustToolchain
+              fenix.packages.${system}.rust-analyzer
               pkgs.nushell
               pkgs.git
               pkgs.just
+              pkgs.nixfmt
               pkgs.stdenv.cc
+              pkgs.statix
               pkgs.cargo-deny
               pkgs.cargo-expand
               pkgs.cargo-fuzz
@@ -45,9 +58,9 @@
             ];
 
             CARGO_NET_GIT_FETCH_WITH_CLI = "true";
-            CLIPPY_CONF_DIR = toString ./.;
+            CLIPPY_CONF_DIR = "${clippyConfDir}";
             RUSTFMT = "${rustToolchain}/bin/rustfmt";
-            TAPLO_CONFIG = toString ./taplo.toml;
+            TAPLO_CONFIG = "${./taplo.toml}";
 
             shellHook = ''
               # Make an interactive development shell Nushell by default. The
@@ -57,6 +70,9 @@
               fi
             '';
           };
-        });
+        }
+      );
+
+      formatter = forAllSystems (system: (import nixpkgs { inherit system; }).nixfmt);
     };
 }
