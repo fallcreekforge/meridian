@@ -1,44 +1,58 @@
 # Architecture
 
-This repository implements Meridian Client, which runs in a customer's environment. Proprietary
-Meridian Cloud code is outside this repository.
+Meridian Client is the public, customer-controlled half of Meridian. Proprietary Meridian Cloud
+code remains outside this repository.
+
+## Diagram maintenance
+
+The current-state diagram describes merged code. Any PR that changes components, dependencies, or
+runtime data flow must update it. The target-state diagram changes only when the intended
+architecture changes.
+
+## Current state
+
+Arrows below are normal workspace dependencies; the dashed arrow is test-only.
 
 ```text
-Platform credential
-       ↓
-Meridian Client
-       ↓
-platform API
-       ↓
-normalize / filter / validate
-       ↓
-versioned sync protocol
+meridian-cli                 (standalone command parsing)
 
-════════ TRUST BOUNDARY ════════
+meridian-local ────────────► meridian-credential-store
+       ├───────────────────► meridian-platform
+       ├───────────────────► meridian-sync-protocol ──► meridian-types
+       └───────────────────► meridian-types
+       └ - - dev/test - - -► meridian-steam
 
-Meridian Cloud
+meridian-platform ─────────► meridian-credential-store
+       └───────────────────► meridian-types
+
+meridian-steam ────────────► meridian-credential-store
+       └───────────────────► meridian-platform
 ```
 
-The protocol is the auditable boundary: it has no credential type, arbitrary value bag, or
-unrestricted JSON field.
+`SyncEngine` can produce a versioned envelope through injected credential and platform contracts.
+The CLI is not connected to it, and no real platform or cloud request is implemented.
 
-## Workspace
+## Target state
 
 ```text
-meridian-types ◄── meridian-sync-protocol ◄── meridian-local
-       ▲
-       └── meridian-platform ◄─────────────── meridian-local
-                    ▲
-                    └──────────────────────── meridian-steam
+meridian CLI ── local IPC ──► meridian-agent
+                                  │
+CredentialStore ──► typed platform adapter
+                           (Steam and others)
+                                  │
+                                  ▼
+                              SyncEngine
+                                  │
+                       normalize / filter / validate
+                                  │
+                                  ▼
+                     public versioned sync protocol
 
-meridian-credential-store ◄── meridian-platform
-            ▲
-            ├──────────────── meridian-steam
-            └──────────────── meridian-local
+════════════════════════ TRUST BOUNDARY ════════════════════════
 
-meridian-cli
+                            Meridian Cloud
 ```
 
-Cargo dependencies point left. `meridian-local` depends on the platform-neutral contract, not a
-specific integration. Platform crates adapt typed capabilities to that contract. The CLI currently
-contains only command handling and is not connected to `SyncEngine`.
+The local core remains platform-neutral. Platform crates implement typed capabilities, and the
+public protocol explicitly limits what may cross the trust boundary. Platform credentials have no
+representation in that protocol.

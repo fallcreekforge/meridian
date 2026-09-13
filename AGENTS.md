@@ -5,6 +5,9 @@
 - Make the smallest coherent change and avoid speculative dependencies or abstractions.
 - Preserve the dependency graph in `ARCHITECTURE.md` and keep cloud implementation out of this
   repository.
+- Update the current-state diagram in the same PR as any component, dependency, or runtime-flow
+  change.
+- Keep cross-repository product and domain decisions in `fallcreekforge-docs`.
 - Update an ADR only when an architectural contract changes.
 - Follow crate-local `AGENTS.md` files for boundary-specific rules.
 
