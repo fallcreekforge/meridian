@@ -90,15 +90,15 @@ def main [root: path = "."] {
 
     if not ($root_instructions | is-empty) {
         let root_instruction = ($root_instructions | first)
-        if not ((open --raw $root_instruction) | str contains "AGENT-CONTEXT.md") {
-            let message = "Root agent instructions must route work to AGENT-CONTEXT.md."
+        if not ((open --raw $root_instruction) | str contains "EXTERNAL-CONTEXT.md") {
+            let message = "Root agent instructions must route work to EXTERNAL-CONTEXT.md."
             $failures = $failures | append $message
         }
     }
 
-    let context_guide = ($repository | path join "AGENT-CONTEXT.md")
+    let context_guide = ($repository | path join "EXTERNAL-CONTEXT.md")
     if not (($context_guide | path exists) and (file-size $context_guide) > 0) {
-        let message = "The repository root must contain a non-empty AGENT-CONTEXT.md."
+        let message = "The repository root must contain a non-empty EXTERNAL-CONTEXT.md."
         $failures = $failures | append $message
     }
 

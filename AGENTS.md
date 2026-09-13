@@ -9,7 +9,7 @@
   change.
 - Keep cross-repository product and domain decisions in `fallcreekforge-docs`.
 - For external documentation, roadmap, sprint, prioritization, or sequencing work, read
-  `AGENT-CONTEXT.md` and the relevant linked context when available.
+  `EXTERNAL-CONTEXT.md` and the relevant linked context when available.
 - Read `SECURITY.md` before changing credentials, protocols, transports, logging, or the
   customer-to-cloud trust boundary.
 - Update an ADR only when an architectural contract changes.
