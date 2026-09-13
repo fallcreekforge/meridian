@@ -1,4 +1,8 @@
 /target
 .direnv/
 result
-roadmap/
+
+# Local external-context links; canonical plans live in fallcreekforge-docs.
+/roadmap/ROADMAP.md
+/roadmap/sprints/README.md
+/roadmap/sprints/SPRINT-*.md

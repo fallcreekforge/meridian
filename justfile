@@ -21,6 +21,9 @@ toml-fmt:
 check:
    cargo check --workspace --all-targets --all-features
 
+agent-context-audit:
+   nu --no-config-file scripts/agent-context-audit.nu
+
 ci: fmt lint nix-fmt nix-lint test toml-fmt
 
 run *args:
