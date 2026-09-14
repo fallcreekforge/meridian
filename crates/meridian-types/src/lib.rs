@@ -1,4 +1,4 @@
-//! Small identifiers shared across Meridian's public crates.
+//! Small identifiers shared across Meridian Client's public crates.
 
 use serde::{
    Deserialize,
