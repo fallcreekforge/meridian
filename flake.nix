@@ -32,6 +32,12 @@
           "rustc"
           "rustfmt"
         ];
+      stableRustToolchainFor =
+        system:
+        fenix.packages.${system}.stable.withComponents [
+          "cargo"
+          "rustc"
+        ];
       rustPlatformFor =
         system:
         let
@@ -112,6 +118,43 @@
           };
         };
 
+      stableCompatibility =
+        let
+          pkgs = pkgsFor ciSystem;
+          rustToolchain = stableRustToolchainFor ciSystem;
+          rustPlatform = pkgs.makeRustPlatform {
+            cargo = rustToolchain;
+            rustc = rustToolchain;
+          };
+        in
+        pkgs.stdenv.mkDerivation {
+          pname = "meridian-client-stable-compatibility";
+          inherit version;
+
+          src = ./.;
+          cargoDeps = rustPlatform.importCargoLock {
+            lockFile = ./Cargo.lock;
+          };
+          nativeBuildInputs = [
+            rustPlatform.cargoSetupHook
+            rustToolchain
+          ];
+          strictDeps = true;
+          dontConfigure = true;
+
+          buildPhase = ''
+            runHook preBuild
+            cargo test --locked --workspace --all-features
+            runHook postBuild
+          '';
+
+          installPhase = ''
+            runHook preInstall
+            touch "$out"
+            runHook postInstall
+          '';
+        };
+
       repositoryQuality =
         let
           pkgs = pkgsFor ciSystem;
@@ -170,6 +213,7 @@
       checks.${ciSystem} = {
         meridian-client = meridianClient;
         repository-quality = repositoryQuality;
+        stable-compatibility = stableCompatibility;
         meridian-client-windows-x86_64 = meridianClientWindowsX86_64;
       };
 

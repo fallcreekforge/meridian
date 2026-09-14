@@ -39,10 +39,11 @@ artifact or a decision about the eventual Windows ABI, installer, or signing pro
 
 ## Continuous integration
 
-The flake is the authoritative CI definition. Hercules CI builds the Linux package, Windows
-cross-package, and repository checks on its `x86_64-linux` agent. A GitHub Actions job separately
-builds, tests, and runs Meridian Client natively on Windows with the MSVC toolchain. Hercules CI
-agent and binary-cache credentials remain outside this repository.
+The flake is the authoritative CI definition. Hercules CI builds the Linux package, verifies stable
+Rust compatibility, cross-builds the Windows package, and runs repository checks on its
+`x86_64-linux` agent. A GitHub Actions job separately builds, tests, and runs Meridian Client
+natively on Windows with the MSVC toolchain. Hercules CI agent and binary-cache credentials remain
+outside this repository.
 
 See [ARCHITECTURE.md](ARCHITECTURE.md), [SECURITY.md](SECURITY.md), and
 [CONTRIBUTING.md](CONTRIBUTING.md) for repository-specific details.
